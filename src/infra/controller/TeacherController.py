@@ -1,25 +1,26 @@
 from application.usecases.includeRegister.IncludeRegister import includeRegister
 from application.usecases.listRegisters.ListRegisters import ListRegisters
 from application.usecases.deleteRegister.deleteRegister import deleteRegister
-from Domain.entities.Student import Student
+from Domain.entities.Teacher import Teacher
 
-class StudentController:
+class TeacherController:
     def __init__(self, repository):
-        self.repository = repository.createStudentRepository()
-
+        self.repository = repository.createTeacherRepository()
+    
     def create(self):
         print('\n----- INCLUSÃO -----\n')
-        studentName = input('Insira o nome do estudante: ')
-        studentCode = input('Insira o código do estudante: ')
+        teacherCode = input('Insira o código do professor: ')
+        teacherName = input('Insira o nome do professor: ')
+        teacherCPF = input('Insira o cpf do professor: ')
         includeRegisterUseCase = includeRegister(self.repository)
-        if(studentName != '' and studentCode != ''): includeRegisterUseCase.execute(Student(studentName, studentCode))
+        includeRegisterUseCase.execute(Teacher(teacherCode, teacherName, teacherCPF))
 
     def list(self):
-        print('\n ----- LISTA DE ESTUDANTES -----\n')
+        print('\n ----- LISTA DE PROFESSORES -----\n')
         listRegistersUseCase = ListRegisters(self.repository)
-        estudantes = listRegistersUseCase.execute()
-        for index, estudante in enumerate(estudantes):
-            print(f"\n - [{index + 1}] [{estudante['code']}] {estudante['name']}")
+        professores = listRegistersUseCase.execute()
+        for index, professor in enumerate(professores):
+            print(f"\n - [{index + 1}] Código: [{professor['code']}] {professor['name']} - {professor['cpf']}")
 
     def delete(self):
         idToDelete = input('Escolha um indice da lista para ser deletado: ')
