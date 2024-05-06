@@ -65,6 +65,11 @@ while mainMenu or operacionalMenu:
         if(operationalInput == '2'): 
             controllers[managementInput].list()
             continue
-
+        if(operationalInput == '4'): 
+            controllers[managementInput].delete()
+            continue
+        if(operationalInput == '3'): 
+            controllers[managementInput].update()
+            continue
 print('\n===== ATUALIZAÇÃO =====\n')
 print('Finalizando aplicação...')

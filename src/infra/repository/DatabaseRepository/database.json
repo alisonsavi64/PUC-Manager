@@ -1,23 +1,7 @@
 {
-    "students": [
-        {
-            "name": "Alison",
-            "code": "1724"
-        }
-    ],
+    "students": [],
     "disciplines": [],
     "enrollments": [],
-    "teachers": [
-        {
-            "name": "asgasgsagsag",
-            "code": "214124124",
-            "cpf": "123124"
-        },
-        {
-            "name": "sashhashashash",
-            "code": "21521612612",
-            "cpf": "1256125125125"
-        }
-    ],
+    "teachers": [],
     "classes": []
 }
