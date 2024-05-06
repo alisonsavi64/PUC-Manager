@@ -2,8 +2,12 @@
 
 #Arquivo principal que executa o código
 from Domain.entities.MainMenuOptions import MainMenuOptions
-from infra.Controller.StudentController import StudentController
-from infra.Repository.MemoryRepositoryFactory import MemoryRepositoryFactory
+from infra.controller.StudentController import StudentController
+from infra.controller.DisciplineController import DisciplineController
+from infra.controller.EnrollmentController import EnrollmentController
+from infra.controller.TeacherController import TeacherController
+from infra.controller.ClassController import ClassController
+from infra.repository.DatabaseRepositoryFactory import DatabaseRepositoryFactory
 
 #Variável que armazena o estado do Menu de Opções
 mainMenu = True
@@ -11,10 +15,22 @@ mainMenu = True
 operacionalMenu = False
 
 #Repositório Master que cria todas as estruturas de impressão e armazenamento de entidades (Estudantes, Professores...)
-memoryRepository = MemoryRepositoryFactory()
+RepositoryFactory = DatabaseRepositoryFactory()
 
 #Inicialização do controller de estudantes
-studentsController = StudentController(memoryRepository)
+studentsController = StudentController(RepositoryFactory)
+disciplinesController = DisciplineController(RepositoryFactory)
+classesController = ClassController(RepositoryFactory)
+enrollmentsController = EnrollmentController(RepositoryFactory)
+teachersController = TeacherController(RepositoryFactory)
+
+controllers = {
+    "1": studentsController,
+    "2": teachersController,
+    "3": disciplinesController,
+    "4": classesController,
+    "5": enrollmentsController
+}
 
 #Bloco principal de execução
 while mainMenu or operacionalMenu:
@@ -29,16 +45,11 @@ while mainMenu or operacionalMenu:
         print('(5) Gerenciar matrículas.')
         print('(9) Sair.\n')
         managementInput = input("Informe a opção desejada: ")
-        #Finalização da executação caso o valor inserido seja 9
         if(managementInput == '9'): break
-        #Caso o valor de input seja diferente de 1 (Estudantes) printar EM DESENVOLVIMENTO
-        if(managementInput != '1'): 
-            print('\nEM DESENVOLVIMENTO\n')
-            continue
+        if(managementInput not in ('1', '2', '3', '4', '5', '9')): continue
         operacionalMenu = True
     
     if(operacionalMenu):
-        #Bloco de execução das operações
         print(f'\n***** [{MainMenuOptions[managementInput]}] MENU DE OPERAÇÕES *****\n')
         print('(1) Incluir.')
         print('(2) Listar.')
@@ -46,21 +57,19 @@ while mainMenu or operacionalMenu:
         print('(4) Excluir.')
         print('(9) Voltar ao menu principal.\n')
         operationalInput = input("Informe a ação desejada: ")
-        #Caso o valor do input seja 9 volta para o bloco do menu principal
         if(operationalInput == '9'): 
             operacionalMenu = False
-        #Caso o valor do input seja 1 e executada a função de inclusão dos alunos
         if(operationalInput == '1'):
-            print('\n----- INCLUSÃO -----\n')
-            student = input('Insira o nome do estudante: ')
-            if(student != ''): studentsController.create(student)
+            controllers[managementInput].create()
             continue
-        #Caso o valor do input seja 1 e executada a função listagem dos alunos
         if(operationalInput == '2'): 
-            studentsController.list()
+            controllers[managementInput].list()
             continue
-        print('\nEM DESENVOLVIMENTO\n')
-
+        if(operationalInput == '4'): 
+            controllers[managementInput].delete()
+            continue
+        if(operationalInput == '3'): 
+            controllers[managementInput].update()
+            continue
 print('\n===== ATUALIZAÇÃO =====\n')
 print('Finalizando aplicação...')
-
